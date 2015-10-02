@@ -1,0 +1,3 @@
+Enter file contents here
+
+rmr: Permission denied: user=root, access=WRITE, inode="/output":hadoop:supergroup:drwxr-xr-x
