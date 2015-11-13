@@ -1,0 +1,52 @@
+
+
+#!/usr/bin/python
+# -*- coding: utf-8 -*- 
+
+import sys
+from datetime import datetime, timedelta
+import json
+import requests
+import urllib2 # extensible library for opening URLs
+import time
+
+# 인천 미세먼지 
+url = 'http://www.airkorea.or.kr/index'
+url1 ="http://127.0.0.1:4242/api/put"
+
+def insert(value):
+        data={
+                "metric":"ffff",
+                "timestamp":time.time(),
+                "value":value,
+                "tags":{
+                        "host":"mypc"
+                }
+        }
+        ret = requests.post(url1, data=json.dumps(data))
+
+
+def getData(buffers):
+    a = buffers.split('<tbody id="mt_mmc2_10007">')[1]
+    #print a
+
+    b = a.split('</tbody>')[0].replace('<tr>','').replace('</tr>','').replace('</td>','')
+    #print b
+
+    c = b.split('<td>')
+    print c[7]
+    print c[8]
+
+    insert(int(c[8]))
+
+while 1 :
+    t = time.localtime()
+    tsec = t.tm_sec
+    if tsec%5!=0 :
+            print tsec
+            time.sleep(1)
+
+    else :
+           page = urllib2.urlopen(url).read()
+           getData(page)
+           time.sleep(1)
